@@ -1,1 +1,104 @@
-Hello world
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bob — Profile</title>
+
+  <style>
+    :root {
+      --c1: #F9F8F6; /* 背景 */
+      --c2: #EFE9E3; /* 卡片 */
+      --c3: #D9CFC7; /* 線條、淡文字 */
+      --c4: #C9B59C; /* 強調 */
+      --text: #3b3b3b;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--c1);
+      font-family: Inter, "Noto Sans TC", system-ui, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: var(--c2);
+      width: min(520px, 90vw);
+      padding: 32px;
+      border-radius: 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid var(--c3);
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      color: var(--c4);
+      font-family: var(--mono);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      margin-top: 24px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .line {
+      height: 1px;
+      background: var(--c3);
+      margin: 14px 0;
+    }
+
+    ul {
+      padding-left: 18px;
+      margin: 0;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--c3);
+      margin-top: 26px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1 class="title">Bob</h1>
+    <div class="subtitle">@Bob</div>
+
+    <div class="section-title">簡介</div>
+    <div>嗨，我是 Bob！喜歡玩遊戲、看小說與動漫，也喜歡一些科技與程式相關的東西。</div>
+
+    <div class="line"></div>
+
+    <div class="section-title">興趣</div>
+    <ul>
+      <li>🎮 玩遊戲</li>
+      <li>📖 看小說</li>
+      <li>✨ 動漫</li>
+    </ul>
+
+    <div class="footer">© 2025 Bob</div>
+  </div>
+
+</body>
+</html>
