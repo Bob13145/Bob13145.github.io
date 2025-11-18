@@ -6,53 +6,139 @@
   <title>Bob — Profile</title>
 
   <style>
+    /* ===== 色票 ===== */
     :root {
-      --c1: #F9F8F6; /* 背景 */
-      --c2: #EFE9E3; /* 卡片 */
-      --c3: #D9CFC7; /* 線條、淡文字 */
-      --c4: #C9B59C; /* 強調 */
-      --text: #3b3b3b;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas;
+      --c1: #F9F8F6;
+      --c2: #EFE9E3;
+      --c3: #D9CFC7;
+      --c4: #C9B59C;
+      --text: #333;
+      --shadow-main: rgba(0,0,0,0.10);
+      --shadow-soft: rgba(0,0,0,0.04);
     }
 
+    /* ===== 深色模式 ===== */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --c1: #1f1e1d;
+        --c2: #272624;
+        --c3: #3f3b38;
+        --c4: #C9B59C;
+        --text: #e9e6e3;
+        --shadow-main: rgba(0,0,0,0.45);
+        --shadow-soft: rgba(255,255,255,0.03);
+      }
+    }
+
+    /* ===== 背景：柔光 + 大面積漸層 + 噪點 ===== */
     body {
       margin: 0;
-      padding: 0;
-      background: var(--c1);
-      font-family: Inter, "Noto Sans TC", system-ui, sans-serif;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      font-family: Inter, "Noto Sans TC", system-ui, sans-serif;
+      background: var(--c1);
+
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.45), transparent 60%),
+        radial-gradient(circle at 80% 70%, rgba(200,185,156,0.25), transparent 65%),
+        url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgYGAAAAAEAAGjCh8bAAAAAElFTkSuQmCC");
+      background-size: cover, cover, 200px;
+      backdrop-filter: blur(2px);
     }
 
+    /* ===== 卡片外層光暈（層次提升） ===== */
+    .wrapper {
+      padding: 18px;
+      border-radius: 28px;
+      background: linear-gradient(
+        145deg,
+        rgba(255,255,255,0.25),
+        rgba(0,0,0,0.05)
+      );
+      border: 1px solid rgba(255,255,255,0.6);
+      box-shadow:
+        0 20px 40px var(--shadow-main),
+        inset 0 2px 6px var(--shadow-soft);
+      backdrop-filter: blur(12px);
+      animation: rise 0.6s ease;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ===== 卡片本體 ===== */
     .card {
       background: var(--c2);
-      width: min(520px, 90vw);
-      padding: 32px;
-      border-radius: 18px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      width: min(500px, 90vw);
+      padding: 34px;
+      border-radius: 22px;
       border: 1px solid var(--c3);
+      box-shadow:
+        0 6px 16px var(--shadow-main),
+        0 1px 3px var(--shadow-soft);
+      backdrop-filter: blur(8px);
+      position: relative;
+      overflow: hidden;
     }
 
+    /* ===== 卡片科技光線（微科技感） ===== */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        from 0deg,
+        transparent,
+        rgba(255,255,255,0.2),
+        transparent 40%
+      );
+      animation: spin 6s linear infinite;
+      pointer-events: none;
+      opacity: 0.25;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ===== Avatar ===== */
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      display: block;
+      margin: 0 auto 16px auto;
+      border: 3px solid var(--c4);
+      object-fit: cover;
+      box-shadow: 0 4px 8px var(--shadow-main);
+    }
+
+    /* ===== 標題 ===== */
     .title {
       font-size: 28px;
       font-weight: 700;
-      color: var(--text);
+      text-align: center;
       margin: 0;
-      margin-bottom: 4px;
+      color: var(--text);
     }
 
     .subtitle {
+      text-align: center;
       color: var(--c4);
-      font-family: var(--mono);
+      font-family: ui-monospace, Menlo, Consolas;
       font-size: 14px;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
     .section-title {
-      margin-top: 24px;
-      margin-bottom: 10px;
+      margin-top: 22px;
       font-size: 16px;
       font-weight: 600;
       color: var(--text);
@@ -61,44 +147,70 @@
     .line {
       height: 1px;
       background: var(--c3);
-      margin: 14px 0;
+      margin: 16px 0;
+      opacity: 0.8;
     }
 
     ul {
       padding-left: 18px;
-      margin: 0;
       color: var(--text);
       line-height: 1.7;
+      margin: 0;
+    }
+
+    /* ===== GitHub 按鈕 ===== */
+    .btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: var(--c4);
+      color: white;
+      padding: 10px 0;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 26px;
+      transition: 0.2s ease;
+      box-shadow: 0 4px 10px var(--shadow-main);
+    }
+    .btn:hover {
+      filter: brightness(0.92);
+      transform: translateY(-1px);
     }
 
     .footer {
       text-align: center;
       font-size: 12px;
       color: var(--c3);
-      margin-top: 26px;
+      margin-top: 24px;
     }
   </style>
 </head>
+
 <body>
+  <div class="wrapper">
+    <div class="card">
+      <img class="avatar" src="https://avatars.githubusercontent.com/u/9919?v=4" alt="avatar" />
 
-  <div class="card">
-    <h1 class="title">Bob</h1>
-    <div class="subtitle">@Bob</div>
+      <h1 class="title">Bob</h1>
+      <div class="subtitle">@Bob</div>
 
-    <div class="section-title">簡介</div>
-    <div>嗨，我是 Bob！喜歡玩遊戲、看小說與動漫。</div>
+      <div class="section-title">簡介</div>
+      <div>嗨，我是 Bob！喜歡玩遊戲、看小說與動漫。</div>
 
-    <div class="line"></div>
+      <div class="line"></div>
 
-    <div class="section-title">興趣</div>
-    <ul>
-      <li>🎮 玩遊戲</li>
-      <li>📖 看小說</li>
-      <li>✨ 動漫</li>
-    </ul>
+      <div class="section-title">興趣</div>
+      <ul>
+        <li>🎮 玩遊戲</li>
+        <li>📖 看小說</li>
+        <li>✨ 動漫</li>
+      </ul>
 
-    <div class="footer">© 2025 Bob</div>
+      <a class="btn" href="https://github.com/" target="_blank">前往我的 GitHub</a>
+
+      <div class="footer">© 2025 Bob</div>
+    </div>
   </div>
-
 </body>
 </html>
