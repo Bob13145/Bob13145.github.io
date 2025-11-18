@@ -8,184 +8,190 @@
 <style>
 /* ========== 基本色票（亮色） ========== */
 :root {
-  --c1: #F9F8F6;
-  --c2: #EFE9E3;
-  --c3: #D9CFC7;
-  --c4: #C9B59C;
-  --text: #333;
-  --card-shadow: rgba(0,0,0,0.15);
-  --glow: rgba(255,255,255,0.65);
+  --c1: #F9F8F6;
+  --c2: #EFE9E3;
+  --c3: #D9CFC7;
+  --c4: #C9B59C;
+  --text: #333;
+  --card-shadow: rgba(0,0,0,0.15);
+  --glow: rgba(255,255,255,0.65);
 }
 
-/* ==========  暗色主題  ========== */
+/* ==========  暗色主題  ========== */
 .dark {
-  --c1: #1f1e1d;
-  --c2: #272624;
-  --c3: #3f3b38;
-  --c4: #C9B59C;
-  --text: #e7e4e0;
-  --card-shadow: rgba(0,0,0,0.6);
-  --glow: rgba(255,255,255,0.1);
+  --c1: #1f1e1d;
+  --c2: #272624;
+  --c3: #3f3b38;
+  --c4: #C9B59C;
+  --text: #e7e4e0;
+  --card-shadow: rgba(0,0,0,0.6);
+  --glow: rgba(255,255,255,0.1);
 }
 
 /* ========== 背景：極簡淡光特效 ========== */
 body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--c1);
-  font-family: Inter, "Noto Sans TC", system-ui, sans-serif;
-  transition: background 0.3s;
-  overflow: hidden;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--c1);
+  font-family: Inter, "Noto Sans TC", system-ui, sans-serif;
+  transition: background 0.3s;
+  overflow: hidden;
 }
 
 /* 背景光暈 */
 body::before {
-  content: "";
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, var(--glow), transparent 70%);
-  top: -200px;
-  right: -200px;
-  opacity: 0.5;
-  pointer-events: none;
-  transition: 0.3s;
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--glow), transparent 70%);
+  top: -200px;
+  right: -200px;
+  opacity: 0.5;
+  pointer-events: none;
+  transition: 0.3s;
 }
 
 /* ========== 卡片外層（微光 + 漸入動畫） ========== */
 .container {
-  animation: fadeIn 0.7s ease forwards;
-  transform: translateY(10px);
-  opacity: 0;
+  animation: fadeIn 0.7s ease forwards;
+  transform: translateY(10px);
+  opacity: 0;
 }
 
 @keyframes fadeIn {
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* ========== 卡片本體 ========== */
 .card {
-  background: var(--c2);
-  border-radius: 20px;
-  padding: 32px;
-  width: min(480px, 90vw);
-  border: 1px solid var(--c3);
-  box-shadow: 0 8px 24px var(--card-shadow);
-  transition: 0.25s ease;
-  position: relative;
-  backdrop-filter: blur(6px);
+  background: var(--c2);
+  border-radius: 20px;
+  padding: 32px;
+  width: min(480px, 90vw);
+  border: 1px solid var(--c3);
+  box-shadow: 0 8px 24px var(--card-shadow);
+  transition: 0.25s ease;
+  position: relative;
+  backdrop-filter: blur(6px);
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px var(--card-shadow);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px var(--card-shadow);
 }
 
 /* 卡片微光框線 */
 .card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  border: 1px solid var(--glow);
-  opacity: 0.4;
-  pointer-events: none;
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  border: 1px solid var(--glow);
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 /* ========== Avatar ========== */
 .avatar {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--c4);
-  display: block;
-  margin: 0 auto 16px auto;
-  box-shadow: 0 4px 10px var(--card-shadow);
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--c4);
+  display: block;
+  margin: 0 auto 16px auto;
+  box-shadow: 0 4px 10px var(--card-shadow);
 }
 
 /* ========== 文字與分隔線 ========== */
 .title {
-  text-align: center;
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
 }
 
 .subtitle {
-  text-align: center;
-  color: var(--c4);
-  font-family: ui-monospace;
-  margin-bottom: 20px;
+  text-align: center;
+  color: var(--c4);
+  font-family: ui-monospace;
+  margin-bottom: 20px;
+}
+
+/* 【新增】簡介內容的樣式：明確使用主要的文字顏色 */
+.profile-content {
+    color: var(--text);
+    line-height: 1.6;
 }
 
 .section-title {
-  margin-top: 20px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .line {
-  height: 1px;
-  background: var(--c3);
-  margin: 14px 0;
-  opacity: 0.9;
+  height: 1px;
+  background: var(--c3);
+  margin: 14px 0;
+  opacity: 0.9;
 }
 
 /* ========== 列表 ========== */
 ul {
-  padding-left: 18px;
-  margin: 0;
-  color: var(--text);
-  line-height: 1.6;
+  padding-left: 18px;
+  margin: 0;
+  color: var(--text);
+  line-height: 1.6;
 }
 
 /* ========== GitHub 按鈕 ========== */
 .btn {
-  display: block;
-  margin-top: 24px;
-  padding: 12px 0;
-  text-align: center;
-  background: var(--c4);
-  color: white;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: 0.2s;
-  box-shadow: 0 4px 10px var(--card-shadow);
+  display: block;
+  margin-top: 24px;
+  padding: 12px 0;
+  text-align: center;
+  background: var(--c4);
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.2s;
+  box-shadow: 0 4px 10px var(--card-shadow);
 }
 
 .btn:hover {
-  filter: brightness(0.9);
-  transform: translateY(-2px);
+  filter: brightness(0.9);
+  transform: translateY(-2px);
 }
 
 /* ========== 主題切換按鈕 ========== */
 .theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: var(--c4);
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  transition: 0.25s;
-  box-shadow: 0 4px 10px var(--card-shadow);
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--c4);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.25s;
+  box-shadow: 0 4px 10px var(--card-shadow);
 }
 
 .theme-toggle:hover {
-  filter: brightness(0.9);
+  filter: brightness(0.9);
 }
 </style>
 </head>
@@ -195,26 +201,26 @@ ul {
 <button class="theme-toggle" id="toggleTheme">🌙 暗色模式</button>
 
 <div class="container">
-  <div class="card">
-    <img class="avatar" src="https://avatars.githubusercontent.com/u/9919?v=4" alt="avatar">
+  <div class="card">
+    <img class="avatar" src="https://avatars.githubusercontent.com/u/9919?v=4" alt="avatar">
 
-    <h1 class="title">Bob</h1>
-    <div class="subtitle">@Bob</div>
+    <h1 class="title">Bob</h1>
+    <div class="subtitle">@Bob</div>
 
-    <div class="section-title">簡介</div>
-    <div>嗨，我是 Bob！喜歡玩遊戲、看小說與動漫。</div>
+    <div class="section-title">簡介</div>
+        <div class="profile-content">嗨，我是 Bob！喜歡玩遊戲、看小說與動漫。</div>
 
-    <div class="line"></div>
+    <div class="line"></div>
 
-    <div class="section-title">興趣</div>
-    <ul>
-      <li>🎮 玩遊戲</li>
-      <li>📖 看小說</li>
-      <li>✨ 動漫</li>
-    </ul>
+    <div class="section-title">興趣</div>
+    <ul>
+      <li>🎮 玩遊戲</li>
+      <li>📖 看小說</li>
+      <li>✨ 動漫</li>
+    </ul>
 
-    <a class="btn" target="_blank" href="https://github.com/">前往我的 GitHub</a>
-  </div>
+    <a class="btn" target="_blank" href="https://github.com/">前往我的 GitHub</a>
+  </div>
 </div>
 
 <script>
@@ -223,13 +229,13 @@ const button = document.getElementById("toggleTheme");
 const body = document.body;
 
 button.addEventListener("click", () => {
-  body.classList.toggle("dark");
+  body.classList.toggle("dark");
 
-  if (body.classList.contains("dark")) {
-    button.textContent = "☀️ 亮色模式";
-  } else {
-    button.textContent = "🌙 暗色模式";
-  }
+  if (body.classList.contains("dark")) {
+    button.textContent = "☀️ 亮色模式";
+  } else {
+    button.textContent = "🌙 暗色模式";
+  }
 });
 </script>
 
