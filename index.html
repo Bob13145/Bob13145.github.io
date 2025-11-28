@@ -6,230 +6,504 @@
 <title>Bob — Profile</title>
 
 <style>
-/* ========== 基本色票（亮色） ========== */
+/* ========== 核心變數與色票 ========== */
 :root {
-  --c1: #F9F8F6;
-  --c2: #EFE9E3;
-  --c3: #D9CFC7;
-  --c4: #C9B59C;
-  --text: #333;
-  --card-shadow: rgba(0,0,0,0.15);
-  --glow: rgba(255,255,255,0.65);
+  /* 基礎色調 */
+  --bg-color: #F0F2F5;
+  --card-bg: rgba(255, 255, 255, 0.65);
+  --card-border: rgba(255, 255, 255, 0.8);
+  --text-main: #2D3748;
+  --text-sub: #718096;
+  --accent: #C9B59C;
+  --accent-hover: #b09b82;
+  
+  /* 陰影系統 */
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
+  --shadow-inner: inset 0 0 20px rgba(255, 255, 255, 0.5);
+  
+  /* 光暈顏色 */
+  --blob-1: #E0C3FC;
+  --blob-2: #8EC5FC;
+
+  --interactive-glow-color: rgba(201, 181, 156, 0.7);
 }
 
-/* ==========  暗色主題  ========== */
+/* ========== 暗色主題 ========== */
 .dark {
-  --c1: #1f1e1d;
-  --c2: #272624;
-  --c3: #3f3b38;
-  --c4: #C9B59C;
-  --text: #e7e4e0;
-  --card-shadow: rgba(0,0,0,0.6);
-  --glow: rgba(255,255,255,0.1);
+  --bg-color: #1a202c;
+  --card-bg: rgba(30, 35, 45, 0.6);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text-main: #F7FAFC;
+  --text-sub: #A0AEC0;
+  --accent: #C9B59C;
+  --accent-hover: #d4c3ae;
+  
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 25px 50px rgba(0, 0, 0, 0.5);
+  --shadow-inner: inset 0 0 20px rgba(255, 255, 255, 0.03);
+
+  --blob-1: #4A5568;
+  --blob-2: #2D3748;
+
+  --interactive-glow-color: rgba(201, 181, 156, 0.3);
 }
 
-/* ========== 背景：極簡淡光特效 ========== */
+/* ========== 全局設定 ========== */
 body {
   margin: 0;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--c1);
-  font-family: Inter, "Noto Sans TC", system-ui, sans-serif;
-  transition: background 0.3s;
+  background-color: var(--bg-color);
+  font-family: 'Inter', "Noto Sans TC", system-ui, sans-serif;
+  overflow: hidden; 
+  transition: background-color 0.5s ease;
+  perspective: 1000px; 
+}
+
+/* ========== 背景動態光暈 ========== */
+.background-blobs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
   overflow: hidden;
 }
 
-/* 背景光暈 */
-body::before {
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: float 10s infinite ease-in-out alternate;
+}
+
+.blob-1 {
+  width: 400px;
+  height: 400px;
+  background: var(--blob-1);
+  top: -100px;
+  left: -100px;
+}
+
+.blob-2 {
+  width: 300px;
+  height: 300px;
+  background: var(--blob-2);
+  bottom: -50px;
+  right: -50px;
+  animation-delay: -5s;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(30px, 50px) scale(1.1); }
+}
+
+/* ========== 噪點紋理 ========== */
+body::after {
   content: "";
   position: absolute;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, var(--glow), transparent 70%);
-  top: -200px;
-  right: -200px;
-  opacity: 0.5;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
   pointer-events: none;
-  transition: 0.3s;
+  z-index: -1;
 }
 
-/* ========== 卡片外層（微光 + 漸入動畫） ========== */
+/* ========== 卡片容器 ========== */
 .container {
-  animation: fadeIn 0.7s ease forwards;
-  transform: translateY(10px);
+  animation: popIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   opacity: 0;
+  transform: translateY(20px);
+  transform-style: preserve-3d;
 }
 
-@keyframes fadeIn {
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+@keyframes popIn {
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ========== 卡片本體 ========== */
 .card {
-  background: var(--c2);
-  border-radius: 20px;
-  padding: 32px;
-  width: min(480px, 90vw);
-  border: 1px solid var(--c3);
-  box-shadow: 0 8px 24px var(--card-shadow);
-  transition: 0.25s ease;
+  background: var(--card-bg);
+  width: min(420px, 85vw);
+  padding: 40px;
+  border-radius: 24px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-lg), var(--shadow-inner);
+  text-align: center;
   position: relative;
-  backdrop-filter: blur(6px);
+  transition: transform 0.1s ease-out; 
+  transform-style: preserve-3d;
+  overflow: hidden; 
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px var(--card-shadow);
-}
-
-/* 卡片微光框線 */
-.card::before {
-  content: "";
+/* ========== 互動邊緣光暈 ========== */
+.interactive-glow {
   position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  border: 1px solid var(--glow);
-  opacity: 0.4;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, var(--interactive-glow-color) 0%, transparent 70%);
+  border-radius: 50%;
   pointer-events: none;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+  mix-blend-mode: soft-light;
+  transform: translate(-50%, -50%);
+  z-index: 5; 
 }
 
-/* ========== Avatar ========== */
+.card:hover .interactive-glow {
+    opacity: 1;
+}
+
+/* ========== 頭像 ========== */
+.avatar-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 20px;
+  transform: translateZ(30px); 
+}
+
 .avatar {
-  width: 90px;
-  height: 90px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--c4);
-  display: block;
-  margin: 0 auto 16px auto;
-  box-shadow: 0 4px 10px var(--card-shadow);
+  border: 4px solid var(--accent);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ========== 文字與分隔線 ========== */
+.avatar-container:hover .avatar {
+  transform: scale(1.1) rotate(5deg);
+  border-color: var(--text-main);
+}
+
+/* ========== 文字排版 ========== */
 .title {
-  text-align: center;
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--text);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-main);
   margin: 0;
+  letter-spacing: -0.5px;
+  transform: translateZ(20px); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* 名字與徽章的間距 */
 }
 
+/* ========== 新增：遊戲化等級徽章 (Level Badge) ========== */
+.level-badge {
+    font-size: 12px;
+    font-weight: 900;
+    color: #744210; /* 深金色字體 */
+    background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%); /* 金色漸層 */
+    padding: 4px 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(253, 185, 49, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(25px); /* 讓徽章也浮起來 */
+    text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+    letter-spacing: 0.5px;
+}
+
+/* 徽章上的流光動畫 */
+.level-badge::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    transform: skewX(-20deg);
+    animation: badgeShine 3s infinite ease-in-out;
+}
+
+@keyframes badgeShine {
+    0% { left: -150%; }
+    20% { left: 150%; }
+    100% { left: 150%; }
+}
+
+/* ========== 副標題 (複製功能) ========== */
 .subtitle {
-  text-align: center;
-  color: var(--c4);
-  font-family: ui-monospace;
-  margin-bottom: 20px;
+  color: var(--accent);
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 14px;
+  margin-bottom: 24px;
+  transform: translateZ(20px);
+  cursor: copy; 
+  position: relative;
+  display: inline-block;
+  padding: 2px 0;
+  transition: color 0.3s;
+}
+
+.subtitle:hover:after {
+    content: "點擊複製!";
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text-main);
+    color: var(--card-bg);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    white-space: nowrap;
+    opacity: 0.9;
+    z-index: 10;
+}
+
+.desc {
+  color: var(--text-main);
+  line-height: 1.6;
+  font-size: 15px;
+  transform: translateZ(15px);
 }
 
 .section-title {
-  margin-top: 20px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
+  margin-top: 32px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: var(--text-sub);
+  transform: translateZ(10px);
 }
 
 .line {
   height: 1px;
-  background: var(--c3);
-  margin: 14px 0;
-  opacity: 0.9;
+  background: linear-gradient(90deg, transparent, var(--text-sub), transparent);
+  margin: 24px 0;
+  opacity: 0.2;
 }
 
-/* ========== 列表 ========== */
+/* ========== 興趣列表 ========== */
 ul {
-  padding-left: 18px;
+  padding: 0;
   margin: 0;
-  color: var(--text);
-  line-height: 1.6;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  transform: translateZ(25px);
 }
 
-/* ========== GitHub 按鈕 ========== */
+li {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--card-border);
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: var(--text-main);
+  font-size: 14px;
+  transition: all 0.3s;
+  cursor: default;
+}
+
+li:hover {
+  background: var(--accent);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(201, 181, 156, 0.4);
+}
+
+/* ========== 按鈕特效 ========== */
 .btn {
   display: block;
-  margin-top: 24px;
-  padding: 12px 0;
+  margin-top: 32px;
+  padding: 14px 0;
   text-align: center;
-  background: var(--c4);
+  background: var(--accent);
   color: white;
-  border-radius: 8px;
+  border-radius: 12px;
   text-decoration: none;
   font-weight: 600;
-  transition: 0.2s;
-  box-shadow: 0 4px 10px var(--card-shadow);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  transform: translateZ(35px); 
+  box-shadow: 0 4px 15px rgba(201, 181, 156, 0.3);
+  cursor: pointer;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: 0.5s;
 }
 
 .btn:hover {
-  filter: brightness(0.9);
-  transform: translateY(-2px);
+  transform: translateZ(35px) translateY(-2px);
+  background: var(--accent-hover);
+  box-shadow: 0 8px 25px rgba(201, 181, 156, 0.5);
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) translateZ(35px); }
+    20% { transform: translate(-1px, 2px) translateZ(35px); }
+    40% { transform: translate(-2px, -1px) translateZ(35px); }
+    60% { transform: translate(1px, 2px) translateZ(35px); }
+    80% { transform: translate(-1px, -1px) translateZ(35px); }
+    100% { transform: translate(0, 0) translateZ(35px); }
+}
+.shake {
+    animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
 }
 
 /* ========== 主題切換按鈕 ========== */
 .theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: var(--c4);
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  color: white;
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(10px);
+  padding: 10px 16px;
+  border-radius: 50px;
+  color: var(--text-main);
   cursor: pointer;
   font-size: 14px;
-  transition: 0.25s;
-  box-shadow: 0 4px 10px var(--card-shadow);
+  font-weight: 600;
+  transition: 0.3s;
+  box-shadow: var(--shadow-sm);
+  z-index: 100; 
 }
 
 .theme-toggle:hover {
-  filter: brightness(0.9);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px var(--accent);
+  border-color: var(--accent);
 }
+
 </style>
 </head>
 
 <body>
 
-<button class="theme-toggle" id="toggleTheme">🌙 暗色模式</button>
+<div class="background-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+</div>
 
-<div class="container">
-  <div class="card">
-    <img class="avatar" src="https://avatars.githubusercontent.com/u/9919?v=4" alt="avatar">
+<button class="theme-toggle" id="toggleTheme">🌙 切換模式</button>
 
-    <h1 class="title">Bob</h1>
-    <div class="subtitle">@Bob</div>
+<div class="container" id="cardContainer">
+  <div class="card" id="profileCard">
+    
+    <div class="interactive-glow" id="cardGlow"></div>
 
-    <div class="section-title">簡介</div>
-    <div>嗨，我是 Bob！喜歡玩遊戲、看小說與動漫。</div>
+    <div class="avatar-container">
+      <img class="avatar" src="https://avatars.githubusercontent.com/u/9919?v=4" alt="avatar">
+    </div>
+
+    <h1 class="title">
+        Bob 
+        <span class="level-badge">LV. 99</span>
+    </h1>
+    
+    <div class="subtitle" id="usernameCopy">@Bob</div>
+
+    <div class="desc">嗨，我是 Bob！喜歡玩遊戲、看小說與動漫。</div>
 
     <div class="line"></div>
 
     <div class="section-title">興趣</div>
+    <br>
     <ul>
       <li>🎮 玩遊戲</li>
       <li>📖 看小說</li>
       <li>✨ 動漫</li>
+      <li>💻 寫程式</li>
     </ul>
 
-    <a class="btn" target="_blank" href="https://github.com/">前往我的 GitHub</a>
+    <a class="btn" id="githubBtn" target="_blank" href="https://github.com/">
+      前往我的 GitHub
+    </a>
   </div>
 </div>
 
 <script>
-/* ========== 亮/暗模式切換邏輯 ========== */
+/* ========== 變數宣告與 DOM 抓取 ========== */
 const button = document.getElementById("toggleTheme");
 const body = document.body;
+const container = document.getElementById('cardContainer');
+const card = document.getElementById('profileCard');
+const glow = document.getElementById('cardGlow');
+const username = document.getElementById('usernameCopy');
+const githubBtn = document.getElementById('githubBtn');
 
+/* ========== 主題切換邏輯 ========== */
 button.addEventListener("click", () => {
   body.classList.toggle("dark");
+  button.textContent = body.classList.contains("dark") ? "☀️ 亮色模式" : "🌙 切換模式";
+});
 
-  if (body.classList.contains("dark")) {
-    button.textContent = "☀️ 亮色模式";
-  } else {
-    button.textContent = "🌙 暗色模式";
-  }
+
+/* ========== 3D 視差傾斜特效 & 互動光暈 ========== */
+document.addEventListener('mousemove', (e) => {
+  const xAxis = (window.innerWidth / 2 - e.pageX) / 25; 
+  const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+  card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+
+  const rect = card.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  
+  glow.style.left = `${x}px`;
+  glow.style.top = `${y}px`;
+});
+
+
+/* ========== 複製功能 ========== */
+username.addEventListener('click', () => {
+    const textToCopy = username.textContent.trim().replace('@', '');
+    
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+            username.textContent = '✅ 已複製!';
+            if (navigator.vibrate) navigator.vibrate(100);
+            setTimeout(() => {
+                username.textContent = '@Bob';
+            }, 1000);
+        })
+        .catch(err => { console.error('複製失敗: ', err); });
+});
+
+
+/* ========== 按鈕震動回饋 ========== */
+githubBtn.addEventListener('click', (e) => {
+    e.preventDefault(); 
+    githubBtn.classList.add('shake');
+    if (navigator.vibrate) navigator.vibrate(200);
+
+    setTimeout(() => {
+        githubBtn.classList.remove('shake');
+        window.open(githubBtn.href, '_blank'); 
+    }, 300); 
 });
 </script>
 
